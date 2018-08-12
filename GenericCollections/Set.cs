@@ -45,6 +45,17 @@ namespace GenericCollections
             _comparer = EqualityComparer<T>.Default;
         }
 
+        public Set(IEnumerable<T> collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException($"{nameof(collection)} can't be equal to null!");
+            }
+
+            _buckets = new Bucket[HashHelpers.GetPrime(collection.Count())];
+            _comparer = EqualityComparer<T>.Default;
+        }
+
         public Set(IEqualityComparer<T> comparer)
         {
             _comparer = comparer ?? throw new ArgumentNullException($"{nameof(comparer)} can't be equal to null!");
@@ -60,6 +71,17 @@ namespace GenericCollections
 
             _comparer = comparer ?? throw new ArgumentNullException($"{nameof(comparer)} can't be equal to null!");
             _buckets = new Bucket[DEFAULT_ARRAY_SIZE];
+        }
+
+        public Set(IEnumerable<T> collection, IEqualityComparer<T> comparer)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException($"{nameof(collection)} can't be equal to null!");
+            }
+
+            _comparer = comparer ?? throw new ArgumentNullException($"{nameof(comparer)} can't be equal to null!");
+            _buckets = new Bucket[HashHelpers.GetPrime(collection.Count())];
         }
         #endregion
 
@@ -122,7 +144,15 @@ namespace GenericCollections
 
         public void ExceptWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            foreach(T e in other)
+            {
+                Remove(e);
+            }
         }
 
         public IEnumerator<T> GetEnumerator()

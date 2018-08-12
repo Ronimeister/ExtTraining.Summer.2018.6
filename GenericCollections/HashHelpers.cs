@@ -29,7 +29,7 @@ namespace GenericCollections
             return GetPrime(newCapacity);
         }
 
-        private static int GetPrime(int value)
+        public static int GetPrime(int value)
         {
             for (int i = 0; i < primes.Length; i++)
             {
