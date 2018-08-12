@@ -22,7 +22,7 @@ namespace GenericCollections
         #endregion
 
         #region Properties
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
         public bool IsReadOnly => false;
         #endregion
@@ -207,12 +207,12 @@ namespace GenericCollections
                 return false;
             }
 
-            if (Count != other.Count())
+            Set<T> otherSet = new Set<T>(other);
+
+            if (Count > otherSet.Count)
             {
                 return false;
             }
-
-            Set<T> otherSet = new Set<T>(other);
 
             return this.All(otherSet.Contains);
         }
@@ -229,17 +229,64 @@ namespace GenericCollections
 
         public bool IsSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (Count == 0)
+            {
+                return true;
+            }
+
+            Set<T> otherSet = new Set<T>(other);
+
+            if (Count > otherSet.Count)
+            {
+                return false;
+            }
+
+            return this.All(otherSet.Contains);
         }
 
         public bool IsSupersetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            Set<T> otherSet = new Set<T>(other);
+
+            return otherSet.IsSubsetOf(this);
         }
 
         public bool Overlaps(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            if (Count == 0)
+            {
+                return false;
+            }
+
+            foreach(T e in other)
+            {
+                if (Contains(e))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool Remove(T item)
@@ -254,7 +301,24 @@ namespace GenericCollections
 
         public bool SetEquals(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            Set<T> otherSet = new Set<T>(other.ToList());
+
+            if (otherSet.Count != Count)
+            {
+                return false;
+            }
+
+            return otherSet.All(Contains);
         }
 
         public void SymmetricExceptWith(IEnumerable<T> other)
