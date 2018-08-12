@@ -149,6 +149,12 @@ namespace GenericCollections
                 throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
             }
 
+            if (other == this)
+            {
+                Clear();
+                return;
+            }
+
             foreach(T e in other)
             {
                 Remove(e);
@@ -170,17 +176,55 @@ namespace GenericCollections
 
         public void IntersectWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            Set<T> prevSet = new Set<T>(this);
+            Set<T> newSet = new Set<T>(other);
+
+            Clear();
+
+            foreach(T e in newSet)
+            {
+                if (prevSet.Contains(e))
+                {
+                    Add(e);
+                }
+            }
         }
 
         public bool IsProperSubsetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return false;
+            }
+
+            if (Count != other.Count())
+            {
+                return false;
+            }
+
+            Set<T> otherSet = new Set<T>(other);
+
+            return this.All(otherSet.Contains);
         }
 
         public bool IsProperSupersetOf(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            return new Set<T>(other).IsProperSubsetOf(this);
         }
 
         public bool IsSubsetOf(IEnumerable<T> other)
@@ -215,7 +259,33 @@ namespace GenericCollections
 
         public void SymmetricExceptWith(IEnumerable<T> other)
         {
-            throw new NotImplementedException();
+            if (other == null)
+            {
+                throw new ArgumentNullException($"{nameof(other)} can't be equal to null!");
+            }
+
+            if (Count == 0)
+            {
+                UnionWith(other);
+            }
+
+            if (other == this)
+            {
+                Clear();
+                return;
+            }
+
+            foreach (T e in other)
+            {
+                if (Contains(e))
+                {
+                    Remove(e);
+                }
+                else
+                {
+                    Add(e);
+                }
+            }
         }
 
         public static ISet<T> Union(ISet<T> lhs, ISet<T> rhs)
