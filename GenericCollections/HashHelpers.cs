@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenericCollections
 {
+    /// <summary>
+    /// Helper class representing some helper methods for <see cref="Set{T}"/> class
+    /// </summary>
     internal static class HashHelpers
     {
         private const int DEFAULT_ARRAY_SIZE = 3;
 
+        /// <summary>
+        /// List of primes
+        /// </summary>
         public static readonly int[] primes = {
             3, 7, 11, 17, 23, 29, 37, 47, 59, 71, 89, 107, 131, 163, 197, 239, 293, 353, 431, 521, 631, 761, 919,
             1103, 1327, 1597, 1931, 2333, 2801, 3371, 4049, 4861, 5839, 7013, 8419, 10103, 12143, 14591,
@@ -17,6 +19,11 @@ namespace GenericCollections
             187751, 225307, 270371, 324449, 389357, 467237, 560689, 672827, 807403, 968897, 1162687, 1395263,
             1674319, 2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369};
 
+        /// <summary>
+        /// Method that increase capacity of the <see cref="Set{T}"/>
+        /// </summary>
+        /// <param name="oldCapacity">Previous capacity</param>
+        /// <returns>New capacity</returns>
         public static int IncreaseCapacity(int oldCapacity)
         {
             if (oldCapacity < DEFAULT_ARRAY_SIZE)
@@ -29,6 +36,11 @@ namespace GenericCollections
             return GetPrime(newCapacity);
         }
 
+        /// <summary>
+        /// Method that return new prime value bigger than <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">input value</param>
+        /// <returns>New prime value bigger than <paramref name="value"/></returns>
         public static int GetPrime(int value)
         {
             for (int i = 0; i < primes.Length; i++)
